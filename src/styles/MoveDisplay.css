@@ -65,6 +65,22 @@
   opacity: 0.25;
 }
 
+.computer-tagline {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: #f43f5e;
+  padding: 0 18px 14px;
+  animation: tagline-in 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes tagline-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .vs-divider {
   font-size: 0.85rem;
   font-weight: 800;

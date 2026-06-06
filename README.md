@@ -2,6 +2,8 @@
 
 > **Show Your Hand. Beat the Machine.**
 
+> **Live Demo:** [ai-rock-paper-scissors-game-three.vercel.app](https://ai-rock-paper-scissors-game-three.vercel.app/)
+
 An AI-powered Rock Paper Scissors game that uses your webcam and a custom-trained [Google Teachable Machine](https://teachablemachine.withgoogle.com/) model to recognize hand gestures in real time. Play against the computer, track your score, watch your win streak grow, and hear the results announced by voice.
 
 Built with **React.js + Vite** — no backend required.
@@ -122,7 +124,7 @@ rockPaperScissorGameAI/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/PseudoCoder007/rockPaperScissorGameAI.git
+git clone https://github.com/PseudoCoder007/ai-rockPaperScissors-game.git
 
 # 2. Move into the project directory
 cd rockPaperScissorGameAI

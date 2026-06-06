@@ -33,7 +33,7 @@ export default function MoveDisplay({ userGesture, computerMove, roundResult, ga
         <div className="vs-divider">VS</div>
 
         <div className={`move-panel ${showMoves && computerMove ? getPanelClass('computer', roundResult) : ''}`}>
-          <span className="move-label">Computer</span>
+          <span className="move-label">Skill Issue 9000</span>
           {showMoves && computerMove ? (
             <>
               <span className="move-emoji" key={computerMove}>
@@ -45,6 +45,9 @@ export default function MoveDisplay({ userGesture, computerMove, roundResult, ga
             <span className="move-placeholder">🤖</span>
           )}
         </div>
+        {showMoves && computerMove && (
+          <p className="computer-tagline">If you lose, it&apos;s definitely a skill issue. 😈🔥</p>
+        )}
       </div>
     </div>
   );

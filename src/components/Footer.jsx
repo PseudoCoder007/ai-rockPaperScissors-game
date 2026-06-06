@@ -13,12 +13,44 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
-        {/* Left: Meet the Builder */}
+        {/* Left: About the Game */}
+        <div className="footer-col">
+          <p className="footer-col-eyebrow">About the Game</p>
+          <p className="footer-game-name">Rock Paper Scissors AI</p>
+          <p className="footer-game-tagline">Show Your Hand. Beat the Machine.</p>
+          <p className="footer-game-about">
+            An AI-powered game that uses your webcam and Google Teachable Machine to recognize
+            Rock, Paper, and Scissors gestures in real time. Built with React&nbsp;+&nbsp;Vite
+            — no server needed.
+          </p>
+        </div>
+
+        {/* Centre: What's Inside */}
+        <div className="footer-col">
+          <p className="footer-col-eyebrow">What&apos;s Inside</p>
+          <div className="footer-features-grid">
+            {FEATURES.map((f) => (
+              <div key={f.label} className="footer-feature-item">
+                <span className="footer-feature-icon">{f.icon}</span>
+                <span className="footer-feature-label">{f.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: Meet the Builder */}
         <div className="footer-col">
           <p className="footer-col-eyebrow">Meet the Builder</p>
           <p className="footer-dev-name">MOHD SAIF</p>
           <p className="footer-dev-tagline">Building the Digital World, Line by Line</p>
           <div className="footer-contact-links">
+            <ContactLink
+              href="https://pseudocoder007.github.io/my-portfolio/"
+              icon={<PortfolioIcon />}
+              label="Portfolio"
+              sublabel="pseudocoder007.github.io/my-portfolio"
+              external
+            />
             <ContactLink
               href="https://github.com/PseudoCoder007"
               icon={<GitHubIcon />}
@@ -41,31 +73,6 @@ export default function Footer() {
             />
           </div>
         </div>
-
-        {/* Middle: Features */}
-        <div className="footer-col">
-          <p className="footer-col-eyebrow">What's Inside</p>
-          <div className="footer-features-grid">
-            {FEATURES.map((f) => (
-              <div key={f.label} className="footer-feature-item">
-                <span className="footer-feature-icon">{f.icon}</span>
-                <span className="footer-feature-label">{f.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: About the Game */}
-        <div className="footer-col">
-          <p className="footer-col-eyebrow">About the Game</p>
-          <p className="footer-game-name">Rock Paper Scissors AI</p>
-          <p className="footer-game-tagline">Show Your Hand. Beat the Machine.</p>
-          <p className="footer-game-about">
-            An AI-powered game that uses your webcam and Google Teachable Machine to recognize
-            Rock, Paper, and Scissors gestures in real time. Built with React&nbsp;+&nbsp;Vite
-            — no server needed.
-          </p>
-        </div>
       </div>
 
       {/* Flickering canvas strip */}
@@ -76,9 +83,9 @@ export default function Footer() {
           flickerChance={0.3}
           color="rgba(255, 255, 255, 0.12)"
           maxOpacity={0.25}
-          text="MOHD SAIF"
+          text="Powered by Curiosity"
           fontWeight="900"
-          textColor="rgba(147, 197, 253, 0.95)"
+          textColor="rgba(244, 63, 94, 0.95)"
         />
       </div>
 
@@ -104,6 +111,16 @@ function ContactLink({ href, icon, label, sublabel, external }) {
         <span className="footer-contact-sublabel">{sublabel}</span>
       </span>
     </a>
+  );
+}
+
+function PortfolioIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
   );
 }
 
