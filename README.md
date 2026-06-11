@@ -4,6 +4,8 @@
 
 > **Live Demo:** [ai-rock-paper-scissors-game-three.vercel.app](https://ai-rock-paper-scissors-game-three.vercel.app/)
 
+> **Project Report:** [View Full Report](https://pseudocoder007.github.io/ai-rockPaperScissors-game/PROJECT_REPORT.html)
+
 An AI-powered Rock Paper Scissors game that uses your webcam and a custom-trained [Google Teachable Machine](https://teachablemachine.withgoogle.com/) model to recognize hand gestures in real time. Play against the computer, track your score, watch your win streak grow, and hear the results announced by voice.
 
 Built with **React.js + Vite** — no backend required.
