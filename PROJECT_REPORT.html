@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Report — AI Rock Paper Scissors Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --bg: #ffffff;
+      --surface: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* ── COVER PAGE ── */
+    .cover {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 40%, #7c3aed 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      top: -200px; right: -150px;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      bottom: -100px; left: -100px;
+    }
+    .cover-logo {
+      font-size: 72px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+    }
+    .cover-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 20px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .cover h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .cover .subtitle {
+      font-size: 18px;
+      color: rgba(255,255,255,.8);
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+    .cover-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .cover-meta-item {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      backdrop-filter: blur(8px);
+    }
+    .cover-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .cover-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .cover-link:hover { background: rgba(255,255,255,.28); }
+
+    /* ── LAYOUT ── */
+    .report-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-bottom: 64px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-number {
+      width: 38px; height: 38px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .section h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .info-box.success {
+      background: #f0fdf4;
+      border-color: var(--success);
+    }
+    .info-box.warning {
+      background: #fffbeb;
+      border-color: var(--warning);
+    }
+    .info-box p { font-size: 14px; color: var(--text); }
+    .info-box strong { color: var(--primary); }
+    .info-box.success strong { color: var(--success); }
+
+    /* ── STEP CARD ── */
+    .steps { display: flex; flex-direction: column; gap: 20px; }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 36px; height: 36px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .step-content p, .step-content li {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .step-content ul { padding-left: 18px; margin-top: 8px; }
+    .step-content li { margin-bottom: 4px; }
+
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    thead tr { background: var(--primary); color: #fff; }
+    thead th { padding: 12px 16px; text-align: left; font-weight: 600; font-size: 13px; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:nth-child(even) { background: var(--surface); }
+    tbody td { padding: 11px 16px; vertical-align: top; }
+    tbody td:first-child { font-weight: 600; color: var(--primary); }
+
+    /* ── CODE BLOCK ── */
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 22px 24px;
+      overflow-x: auto;
+      font-size: 13px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    code {
+      background: #f1f5f9;
+      color: var(--primary);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+
+    /* syntax highlight helpers */
+    .kw { color: #c792ea; }
+    .fn { color: #82aaff; }
+    .str { color: #c3e88d; }
+    .cm { color: #546e7a; font-style: italic; }
+    .num { color: #f78c6c; }
+
+    /* ── FLOW DIAGRAM ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 20px 0;
+      justify-content: center;
+    }
+    .flow-node {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      min-width: 110px;
+    }
+    .flow-node.result { background: var(--success); }
+    .flow-node.wait { background: var(--warning); color: #fff; }
+    .flow-node.idle { background: #64748b; }
+    .flow-arrow {
+      font-size: 20px;
+      color: var(--text-muted);
+      padding: 0 8px;
+    }
+
+    /* ── SCREENSHOT ── */
+    .screenshot-frame {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 12px;
+    }
+    .screenshot-bar {
+      background: #f1f5f9;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #22c55e; }
+    .screenshot-bar .url {
+      margin-left: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 12px;
+      flex: 1;
+      max-width: 400px;
+    }
+    .screenshot-frame img {
+      width: 100%;
+      display: block;
+    }
+    .screenshot-placeholder {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #7c3aed 100%);
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      gap: 16px;
+      padding: 40px;
+    }
+    .screenshot-placeholder .emoji { font-size: 64px; }
+    .screenshot-placeholder p { font-size: 16px; opacity: .8; text-align: center; max-width: 340px; }
+
+    /* ── TECH GRID ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .tech-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .tech-card .icon { font-size: 26px; margin-bottom: 8px; }
+    .tech-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .tech-card p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── FILE TREE ── */
+    .file-tree {
+      background: #0f172a;
+      color: #94a3b8;
+      border-radius: 12px;
+      padding: 24px 28px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+    .file-tree .dir { color: #82aaff; font-weight: 600; }
+    .file-tree .file { color: #c3e88d; }
+    .file-tree .desc { color: #546e7a; }
+
+    /* ── OUTCOME GRID ── */
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .outcome-card {
+      background: var(--primary-light);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .outcome-card .icon { font-size: 28px; margin-bottom: 8px; }
+    .outcome-card h4 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+    .outcome-card p { font-size: 13px; color: var(--text-muted); }
+
+    /* ── LINKS SECTION ── */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .link-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      text-decoration: none;
+      color: var(--text);
+      transition: box-shadow .2s, transform .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .link-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .link-card .lc-icon { font-size: 30px; }
+    .link-card .lc-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .link-card .lc-title { font-size: 16px; font-weight: 700; }
+    .link-card .lc-url { font-size: 12px; color: var(--primary); word-break: break-all; }
+
+    /* ── PAGE BREAK ── */
+    @media print {
+      .cover { page-break-after: always; }
+      .section { page-break-inside: avoid; }
+    }
+
+    /* ── SIGNATURE ── */
+    .signature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    .sig-avatar {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .sig-detail h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .sig-detail p { font-size: 14px; color: var(--text-muted); margin-bottom: 2px; }
+    .sig-detail a { color: var(--primary); text-decoration: none; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">✊✋✌️</div>
+  <div class="cover-badge">Post-Lunch WFH Upskilling Task — 6 June 2026</div>
+  <h1>AI-Powered Rock Paper Scissors Game</h1>
+  <p class="subtitle">A real-time gesture recognition game built with React.js, Google Teachable Machine, and TensorFlow.js — trained, developed, and deployed end-to-end.</p>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">👤 Mohd Saif</div>
+    <div class="cover-meta-item">📅 6 June 2026</div>
+    <div class="cover-meta-item">🎯 Assigned by Vaibhav Joshi Sir</div>
+    <div class="cover-meta-item">⚡ React 18 + Vite 4</div>
+    <div class="cover-meta-item">🤖 Google Teachable Machine</div>
+    <div class="cover-meta-item">🚀 Deployed on Vercel</div>
+  </div>
+
+  <div class="cover-links">
+    <a class="cover-link" href="https://ai-rock-paper-scissors-game-three.vercel.app/" target="_blank">🌐 Live App</a>
+    <a class="cover-link" href="https://github.com/PseudoCoder007/ai-rockPaperScissors-game" target="_blank">💻 GitHub Repo</a>
+    <a class="cover-link" href="https://pseudocoder007.github.io/my-portfolio/" target="_blank">🧑‍💼 Portfolio</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     REPORT BODY
+════════════════════════════════════════════════ -->
+<div class="report-body">
+
+  <!-- ── SECTION 1: Project Overview ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2>Project Overview</h2>
+    </div>
+
+    <div class="info-box">
+      <p><strong>Objective:</strong> Build an AI-powered browser game that uses a webcam and a custom-trained machine learning model to recognize Rock, Paper, and Scissors hand gestures in real time — then play a full game against a computer opponent, complete with scoring, win streaks, and voice announcements.</p>
+    </div>
+
+    <p>The application is a full-stack frontend project built from scratch using <strong>React 18</strong> and <strong>Vite 4</strong>. It integrates <strong>Google Teachable Machine</strong> (an ML model trained by the developer) and <strong>TensorFlow.js</strong> loaded via CDN. A custom gesture-recognition hook reads the webcam feed frame-by-frame, classifies the user's hand pose at the right moment, and a game engine determines the winner. The UI supports <strong>light/dark themes</strong>, real-time <strong>streak tracking</strong>, and <strong>Text-to-Speech</strong> announcements.</p>
+
+    <br/>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="icon">⚛️</div>
+        <h4>React 18 + Vite 4</h4>
+        <p>Frontend framework and build toolchain providing fast HMR and optimized production builds.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🤖</div>
+        <h4>Google Teachable Machine</h4>
+        <p>No-code ML platform used to train a custom image classifier on Rock, Paper, Scissors, and No Gesture classes.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🧠</div>
+        <h4>TensorFlow.js 1.3.1</h4>
+        <p>JavaScript ML runtime loaded via CDN. Runs the Teachable Machine model directly in the browser — no server needed.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">📷</div>
+        <h4>WebRTC Webcam API</h4>
+        <p><code>navigator.mediaDevices.getUserMedia</code> streams live video frames for real-time gesture classification.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🔊</div>
+        <h4>Web Speech API</h4>
+        <p><code>window.speechSynthesis</code> announces game results and prompts out loud for an immersive experience.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🎨</div>
+        <h4>Pure CSS + Variables</h4>
+        <p>No UI libraries. All styling uses CSS custom properties with automatic light/dark theme switching.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🚀</div>
+        <h4>Vercel</h4>
+        <p>Zero-config deployment platform connected to GitHub for instant CI/CD on every push.</p>
+      </div>
+      <div class="tech-card">
+        <div class="icon">🐙</div>
+        <h4>GitHub</h4>
+        <p>Version control repository hosting the complete source code, publicly accessible.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Teachable Machine Training ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2>Phase 1 — Training the AI Model with Google Teachable Machine</h2>
+    </div>
+
+    <p>Before writing a single line of application code, the underlying machine learning model was trained using <strong>Google Teachable Machine</strong> — a free, browser-based tool by Google that lets anyone train image classification models without writing ML code.</p>
+
+    <br/>
+    <div class="info-box warning">
+      <p><strong>Why Teachable Machine?</strong> Training a gesture-recognition model from scratch with raw TensorFlow would require thousands of lines of Python, a GPU, and days of tuning. Teachable Machine abstracts this entirely — training takes under 10 minutes in the browser using your own webcam samples.</p>
+    </div>
+
+    <br/>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Open Google Teachable Machine</h3>
+          <p>Navigate to <strong>teachablemachine.withgoogle.com</strong> and click <em>"Get Started"</em>, then choose <em>"Image Project"</em> → <em>"Standard image model"</em>. This opens the training interface with an empty project.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Create 4 Classes</h3>
+          <p>The model was trained on exactly <strong>4 classes</strong>:</p>
+          <ul>
+            <li><strong>Rock</strong> — closed fist ✊</li>
+            <li><strong>Paper</strong> — open flat hand ✋</li>
+            <li><strong>Scissors</strong> — two-finger V sign ✌️</li>
+            <li><strong>No Gesture</strong> — background / neutral / no hand visible</li>
+          </ul>
+          <p style="margin-top:8px">The <em>"No Gesture"</em> class is critical — without it, the model would always force-predict one of the game gestures even when there is no hand in frame, causing false positives.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Capture Training Samples via Webcam</h3>
+          <p>For each class, the webcam was used to record samples by holding the gesture clearly in front of the camera. Approximately <strong>200–300 image samples per class</strong> were captured across:</p>
+          <ul>
+            <li>Different angles (straight on, slight tilt left/right)</li>
+            <li>Different lighting conditions (bright, dim)</li>
+            <li>Different distances from camera (close, medium)</li>
+            <li>Both hands (where applicable)</li>
+          </ul>
+          <p style="margin-top:8px">More diverse samples = more robust real-world detection.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Train the Model</h3>
+          <p>Click <em>"Train Model"</em>. Teachable Machine uses <strong>transfer learning</strong> on top of MobileNet (a lightweight CNN pre-trained on millions of images by Google). Training fine-tunes only the final classification layer on the 4 custom gesture classes. In the browser, training typically completes in <strong>2–5 minutes</strong> on a standard laptop, even without a GPU.</p>
+          <ul>
+            <li>Default: 50 epochs, batch size 16, learning rate 0.001</li>
+            <li>The training chart shows accuracy rising toward 100% as epochs progress</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Test the Model Live</h3>
+          <p>Teachable Machine provides a real-time preview pane. Each gesture was tested live — a confidence bar shows the probability assigned to each class. The model should show <strong>&gt; 90% confidence</strong> on the correct class when the gesture is held clearly.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h3>Export / Publish the Model</h3>
+          <p>Click <em>"Export Model"</em> → <em>"Tensorflow.js"</em> → <em>"Upload (shareable link)"</em>. Teachable Machine uploads the model files to Google's servers and returns a <strong>unique public URL</strong>. This was then saved as the <code>MODEL_URL</code> constant in the application:</p>
+          <pre><code><span class="cm">// src/utils/constants.js</span>
+<span class="kw">export const</span> <span class="fn">MODEL_URL</span> = <span class="str">'https://teachablemachine.withgoogle.com/models/JfhfXGxkFl/'</span>;</code></pre>
+          <p>The model serves two files at that URL path:</p>
+          <ul>
+            <li><code>model.json</code> — model architecture + weights</li>
+            <li><code>metadata.json</code> — class labels (Rock, Paper, Scissors, No Gesture)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Project Setup ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2>Phase 2 — Project Setup</h2>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Scaffold the React App with Vite</h3>
+          <pre><code>npm create vite@latest rock-paper-scissors-ai -- --template react
+cd rock-paper-scissors-ai
+npm install</code></pre>
+          <p>Vite was chosen over Create React App because it starts in milliseconds, has native ESM support, and produces smaller production bundles.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Load TensorFlow.js and Teachable Machine via CDN</h3>
+          <p>Instead of installing these as npm packages (which causes peer-dependency conflicts with React 18), both libraries are loaded as CDN <code>&lt;script&gt;</code> tags in <code>index.html</code>:</p>
+          <pre><code><span class="cm">&lt;!-- index.html — exact version pairing required --&gt;</span>
+&lt;script src=<span class="str">"https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"</span>&gt;&lt;/script&gt;
+&lt;script src=<span class="str">"https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"</span>&gt;&lt;/script&gt;</code></pre>
+          <p>This makes <code>window.tmImage</code> available globally before the React app boots.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Define All Constants Up Front</h3>
+          <p>All magic values (model URL, gesture names, game states, emoji mappings, TTS messages) were centralized in <code>src/utils/constants.js</code> so they can be imported anywhere without repetition:</p>
+          <pre><code><span class="kw">export const</span> GESTURES = { ROCK: <span class="str">'Rock'</span>, PAPER: <span class="str">'Paper'</span>, SCISSORS: <span class="str">'Scissors'</span>, NO_GESTURE: <span class="str">'No Gesture'</span> };
+<span class="kw">export const</span> GAME_STATES = { IDLE: <span class="str">'idle'</span>, COUNTDOWN: <span class="str">'countdown'</span>, RESULT: <span class="str">'result'</span> };
+<span class="kw">export const</span> PREDICTION_THRESHOLD = <span class="num">0.7</span>; <span class="cm">// 70% confidence minimum</span></code></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Architecture ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <h2>Phase 3 — Application Architecture</h2>
+    </div>
+
+    <p>The app follows a strict <strong>hooks-driven architecture</strong>. All logic lives in custom React hooks; components are pure presentational functions that receive props and render UI. This keeps the codebase modular and easy to test.</p>
+
+    <br/>
+
+    <div class="file-tree">
+      <span class="dir">src/</span><br/>
+      &nbsp;&nbsp;<span class="file">main.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Entry point — renders &lt;App /&gt;</span><br/>
+      &nbsp;&nbsp;<span class="file">App.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Root — wires all hooks together, owns videoRef + theme state</span><br/>
+      <br/>
+      &nbsp;&nbsp;<span class="dir">components/</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Header.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Title bar + light/dark theme toggle button</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">WebcamView.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Live video feed, loading/error overlays, status dots</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">CountdownTimer.jsx</span>&nbsp;<span class="desc">3→2→1 animated countdown display</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">MoveDisplay.jsx</span>&nbsp;&nbsp;&nbsp;<span class="desc">Side-by-side YOUR move vs COMPUTER move cards</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ResultBanner.jsx</span>&nbsp;&nbsp;<span class="desc">"You Win!" / "Computer Wins!" / "Draw!" announcement</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Scoreboard.jsx</span>&nbsp;&nbsp;&nbsp;<span class="desc">Score table + current streak + best streak grid</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Controls.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Start / Play Again / Reset Scores action buttons</span><br/>
+      <br/>
+      &nbsp;&nbsp;<span class="dir">hooks/</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useTeachableMachine.js</span>&nbsp;<span class="desc">Loads model, opens webcam, exposes predictGesture()</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useGameLogic.js</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">useReducer — all game state, scores, streaks, actions</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useCountdown.js</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">3-second countdown timer with start/reset control</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">useSpeech.js</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Wrapper for window.speechSynthesis TTS</span><br/>
+      <br/>
+      &nbsp;&nbsp;<span class="dir">utils/</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">constants.js</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">All constants — MODEL_URL, gestures, states, messages</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">gameRules.js</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">determineWinner() + getComputerMove() pure functions</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">streakUtils.js</span>&nbsp;&nbsp;<span class="desc">updateStreaks() — pure streak state calculator</span><br/>
+      <br/>
+      &nbsp;&nbsp;<span class="dir">styles/</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">variables.css</span>&nbsp;&nbsp;&nbsp;<span class="desc">All CSS custom properties — light + dark theme values</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">App.css</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">Two-column layout grid, .card, responsive breakpoints</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">*.css</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="desc">One CSS file per component</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: Key Implementation ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <h2>Phase 4 — Key Implementation Details</h2>
+    </div>
+
+    <h3 style="margin-bottom:12px; font-size:16px; color:var(--primary)">5.1 — Loading the Model &amp; Webcam (<code>useTeachableMachine.js</code>)</h3>
+    <p style="margin-bottom:12px">On component mount, the hook loads the Teachable Machine model from its hosted URL, then requests webcam access from the browser. Both operations run asynchronously in parallel-safe sequence:</p>
+
+    <pre><code><span class="cm">// Load model from Google's CDN using the exported model URL</span>
+<span class="kw">const</span> tmImage = window.tmImage; <span class="cm">// injected via &lt;script&gt; tag in index.html</span>
+modelRef.current = <span class="kw">await</span> tmImage.<span class="fn">load</span>(
+  MODEL_URL + <span class="str">'model.json'</span>,
+  MODEL_URL + <span class="str">'metadata.json'</span>
+);
+
+<span class="cm">// Open webcam stream</span>
+<span class="kw">const</span> stream = <span class="kw">await</span> navigator.mediaDevices.<span class="fn">getUserMedia</span>({
+  video: { facingMode: <span class="str">'user'</span>, width: <span class="num">640</span>, height: <span class="num">480</span> },
+});
+video.srcObject = stream;
+<span class="kw">await</span> video.<span class="fn">play</span>();</code></pre>
+
+    <br/>
+    <h3 style="margin-bottom:12px; font-size:16px; color:var(--primary)">5.2 — Gesture Prediction with Confidence Threshold</h3>
+    <p style="margin-bottom:12px">When the countdown hits zero, <code>predictGesture()</code> runs a single inference pass on the current video frame. A <strong>70% confidence threshold</strong> filters out uncertain predictions:</p>
+
+    <pre><code><span class="kw">const</span> predictions = <span class="kw">await</span> modelRef.current.<span class="fn">predict</span>(videoRef.current);
+<span class="kw">const</span> best = predictions.<span class="fn">reduce</span>((a, b) =&gt; a.probability &gt; b.probability ? a : b);
+
+<span class="cm">// Only accept if confidence ≥ 70% AND not "No Gesture"</span>
+<span class="kw">if</span> (best.probability &gt;= <span class="num">0.7</span> &amp;&amp; best.className !== GESTURES.NO_GESTURE) {
+  <span class="kw">return</span> best.className; <span class="cm">// "Rock" | "Paper" | "Scissors"</span>
+}
+<span class="kw">return null</span>; <span class="cm">// triggers NO_GESTURE action</span></code></pre>
+
+    <br/>
+    <h3 style="margin-bottom:12px; font-size:16px; color:var(--primary)">5.3 — Game State Machine (<code>useGameLogic.js</code>)</h3>
+    <p style="margin-bottom:12px">All game state is managed by a <code>useReducer</code> — a predictable, testable state machine with three core states:</p>
+
+    <div class="flow">
+      <div class="flow-node idle">idle</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">countdown</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node result">result</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">countdown</div>
+    </div>
+    <p style="font-size:13px; color:var(--text-muted); text-align:center; margin-top:8px; margin-bottom:16px">idle → START_GAME → countdown → CAPTURE_GESTURE / NO_GESTURE → result → PLAY_AGAIN → countdown</p>
+
+    <pre><code><span class="kw">case</span> <span class="str">'CAPTURE_GESTURE'</span>: {
+  <span class="kw">const</span> { gesture } = action.payload;
+  <span class="kw">const</span> computerMove = <span class="fn">getComputerMove</span>();          <span class="cm">// random pick</span>
+  <span class="kw">const</span> result = <span class="fn">determineWinner</span>(gesture, computerMove); <span class="cm">// pure function</span>
+  <span class="kw">const</span> newStreaks = <span class="fn">updateStreaks</span>(result, state);   <span class="cm">// pure function</span>
+
+  <span class="kw">return</span> {
+    ...state, gesture, computerMove, result,
+    gameState: GAME_STATES.RESULT,
+    userScore: result === <span class="str">'user_win'</span> ? state.userScore + <span class="num">1</span> : state.userScore,
+    ...newStreaks,
+  };
+}</code></pre>
+
+    <br/>
+    <h3 style="margin-bottom:12px; font-size:16px; color:var(--primary)">5.4 — Game Rules (<code>gameRules.js</code>)</h3>
+    <p style="margin-bottom:12px">The win logic is a simple lookup table rather than a chain of if/else conditions:</p>
+    <pre><code><span class="kw">export function</span> <span class="fn">determineWinner</span>(userGesture, computerMove) {
+  <span class="kw">if</span> (userGesture === computerMove) <span class="kw">return</span> <span class="str">'draw'</span>;
+  <span class="kw">const</span> winsAgainst = {
+    Rock: <span class="str">'Scissors'</span>,
+    Paper: <span class="str">'Rock'</span>,
+    Scissors: <span class="str">'Paper'</span>,
+  };
+  <span class="kw">return</span> winsAgainst[userGesture] === computerMove ? <span class="str">'user_win'</span> : <span class="str">'computer_win'</span>;
+}</code></pre>
+
+    <br/>
+    <h3 style="margin-bottom:12px; font-size:16px; color:var(--primary)">5.5 — Text-to-Speech (<code>useSpeech.js</code>)</h3>
+    <p style="margin-bottom:12px">The Web Speech API <code>speechSynthesis</code> announces each event. Previous utterances are cancelled before each new one to prevent queuing:</p>
+    <pre><code><span class="kw">const</span> speak = <span class="fn">useCallback</span>((text) =&gt; {
+  window.speechSynthesis.<span class="fn">cancel</span>();           <span class="cm">// stop any ongoing speech</span>
+  <span class="kw">const</span> utterance = <span class="kw">new</span> <span class="fn">SpeechSynthesisUtterance</span>(text);
+  window.speechSynthesis.<span class="fn">speak</span>(utterance);
+}, []);</code></pre>
+
+    <br/>
+    <h3 style="margin-bottom:12px; font-size:16px; color:var(--primary)">5.6 — Light / Dark Theme</h3>
+    <p style="margin-bottom:12px">Theme switching is done by toggling a single HTML attribute — all CSS variables update automatically:</p>
+    <pre><code><span class="cm">/* variables.css — same property, two theme contexts */</span>
+:root                    { --color-bg: #ffffff; --color-primary: #2563eb; }
+[data-theme="dark"]      { --color-bg: #0f172a; --color-primary: #60a5fa; }
+
+<span class="cm">// App.jsx — one line to switch theme</span>
+document.documentElement.<span class="fn">setAttribute</span>(<span class="str">'data-theme'</span>, isDark ? <span class="str">'dark'</span> : <span class="str">'light'</span>);</code></pre>
+
+  </div>
+
+  <!-- ── SECTION 6: Full Game Flow ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">6</div>
+      <h2>Complete Game Flow — Step by Step</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Page Load</h3>
+          <p>TensorFlow.js and Teachable Machine load from CDN. <code>useTeachableMachine</code> fires, loads the model from <code>MODEL_URL</code> and requests webcam permission. Once both are ready, status dots turn green: <strong>● Camera ● AI Model</strong>. The Start button activates.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>User Clicks "Start Game"</h3>
+          <p><code>START_GAME</code> action dispatched → <code>gameState</code> becomes <code>'countdown'</code>. The countdown hook starts: <strong>3 → 2 → 1</strong> displayed with a 1-second interval.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Countdown Reaches Zero</h3>
+          <p>TTS announces <em>"Show your move!"</em>. <code>predictGesture()</code> captures a single frame from the live video and runs inference. The model returns confidence probabilities for all 4 classes.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4a</div>
+        <div class="step-content">
+          <h3>Gesture Detected (confidence ≥ 70%)</h3>
+          <p><code>CAPTURE_GESTURE</code> action fires with the detected gesture. The reducer picks a random computer move, determines the winner, updates scores and streaks, transitions to <code>'result'</code> state. TTS announces the result.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4b</div>
+        <div class="step-content">
+          <h3>No Gesture Detected</h3>
+          <p><code>NO_GESTURE</code> action fires. TTS announces <em>"Gesture not detected. Try again!"</em>. No scores change. User can click "Play Again" to retry.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Result Phase</h3>
+          <p>The right panel shows both moves side by side with win/loss/draw colour coding. The scoreboard updates live. The user can click <strong>Play Again</strong> (restart countdown, keep scores) or <strong>Reset Scores</strong> (return to idle, clear all data).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 7: Screenshot ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <h2>Application Screenshots</h2>
+    </div>
+
+    <p style="margin-bottom:20px">Below are screenshots of the live game in action — the main game interface and the footer section.</p>
+
+    <h3 style="margin-bottom:12px; font-size:15px; color:var(--primary)">Game Interface</h3>
+    <div class="screenshot-frame">
+      <div class="screenshot-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="url">ai-rock-paper-scissors-game-three.vercel.app</span>
+      </div>
+      <img src="game_screenshot/game page.png" alt="Rock Paper Scissors AI — Game Interface" />
+    </div>
+
+    <p style="font-size:13px; color:var(--text-muted); margin-top:8px; margin-bottom:24px">Live webcam feed (left column), gesture result cards, real-time scoreboard, win streak indicator, and action buttons.</p>
+
+    <h3 style="margin-bottom:12px; font-size:15px; color:var(--primary)">Footer Section</h3>
+    <div class="screenshot-frame">
+      <div class="screenshot-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="url">ai-rock-paper-scissors-game-three.vercel.app</span>
+      </div>
+      <img src="game_screenshot/game footer.png" alt="Rock Paper Scissors AI — Footer" />
+    </div>
+
+    <p style="font-size:13px; color:var(--text-muted); margin-top:8px; margin-bottom:24px">Footer with developer info, portfolio link, and GitHub link.</p>
+
+    <div class="info-box success">
+      <p><strong>Live App:</strong> The game is publicly accessible at <a href="https://ai-rock-paper-scissors-game-three.vercel.app/" target="_blank" style="color:var(--success)">ai-rock-paper-scissors-game-three.vercel.app</a> — no installation required.</p>
+    </div>
+
+    <br/>
+    <h3 style="margin-bottom:14px; font-size:16px">UI Layout — Two-Column Design</h3>
+    <table>
+      <thead>
+        <tr><th>Left Column</th><th>Right Column</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Live webcam feed</td><td>Result banner (Win / Lose / Draw)</td></tr>
+        <tr><td>Camera and AI Model status dots</td><td>User move card vs Computer move card</td></tr>
+        <tr><td>Countdown display (3-2-1)</td><td>Live scoreboard</td></tr>
+        <tr><td>"Round complete" status text</td><td>Win streak grid</td></tr>
+        <tr><td>Start / Play Again / Reset buttons</td><td>Best streak records</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── SECTION 8: Deployment ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">8</div>
+      <h2>Phase 5 — Deployment to Vercel</h2>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Push to GitHub</h3>
+          <p>The project was committed to a public GitHub repository at <strong>github.com/PseudoCoder007/ai-rockPaperScissors-game</strong>. All source code, including the Vite config, is version-controlled.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Import Project on Vercel</h3>
+          <p>Log in to <strong>vercel.com</strong>, click "Add New Project", and import the GitHub repository. Vercel automatically detects Vite as the framework.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Zero-Config Build Settings</h3>
+          <p>Vercel uses the following settings (auto-detected):</p>
+          <ul>
+            <li><strong>Build Command:</strong> <code>npm run build</code> → runs <code>vite build</code></li>
+            <li><strong>Output Directory:</strong> <code>dist/</code></li>
+            <li><strong>Install Command:</strong> <code>npm install</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Continuous Deployment</h3>
+          <p>Every push to the <code>main</code> branch automatically triggers a new production build on Vercel. The live URL is always up to date with the latest committed code — no manual deployment steps needed.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Live Production URL</h3>
+          <p>The app is publicly accessible at:<br/>
+          <a href="https://ai-rock-paper-scissors-game-three.vercel.app/" target="_blank" style="color:var(--primary); font-weight:600;">https://ai-rock-paper-scissors-game-three.vercel.app/</a></p>
+          <p style="margin-top:6px; font-size:13px; color:var(--text-muted)">Requirements to play: Allow camera access when prompted. Requires an internet connection (CDN assets). Best in Chrome, Edge, or Firefox.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 9: Project Links ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">9</div>
+      <h2>Project Deliverables &amp; Links</h2>
+    </div>
+
+    <div class="links-grid">
+      <a class="link-card" href="https://ai-rock-paper-scissors-game-three.vercel.app/" target="_blank">
+        <div class="lc-icon">🌐</div>
+        <div class="lc-label">Live Application</div>
+        <div class="lc-title">Play the Game</div>
+        <div class="lc-url">ai-rock-paper-scissors-game-three.vercel.app</div>
+      </a>
+
+      <a class="link-card" href="https://github.com/PseudoCoder007/ai-rockPaperScissors-game" target="_blank">
+        <div class="lc-icon">💻</div>
+        <div class="lc-label">Source Code</div>
+        <div class="lc-title">GitHub Repository</div>
+        <div class="lc-url">github.com/PseudoCoder007/ai-rockPaperScissors-game</div>
+      </a>
+
+      <a class="link-card" href="https://pseudocoder007.github.io/my-portfolio/" target="_blank">
+        <div class="lc-icon">🧑‍💼</div>
+        <div class="lc-label">Portfolio</div>
+        <div class="lc-title">Developer Portfolio</div>
+        <div class="lc-url">pseudocoder007.github.io/my-portfolio/</div>
+      </a>
+
+      <a class="link-card" href="https://teachablemachine.withgoogle.com/models/JfhfXGxkFl/" target="_blank">
+        <div class="lc-icon">🤖</div>
+        <div class="lc-label">AI Model</div>
+        <div class="lc-title">Teachable Machine Model</div>
+        <div class="lc-url">teachablemachine.withgoogle.com/models/JfhfXGxkFl/</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── SECTION 10: Learning Outcomes ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <h2>Learning Outcomes</h2>
+    </div>
+
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="icon">🧠</div>
+        <h4>Machine Learning Model Training</h4>
+        <p>Hands-on experience training an image classification model with transfer learning on Google Teachable Machine.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">👁️</div>
+        <h4>Computer Vision</h4>
+        <p>Real-time image classification using a webcam feed — gesture recognition running at prediction time in the browser.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🔢</div>
+        <h4>TensorFlow.js Integration</h4>
+        <p>Loading and running a saved ML model in a JavaScript environment using TensorFlow.js via CDN.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">⚛️</div>
+        <h4>React.js Development</h4>
+        <p>Building a production-quality React app with custom hooks, <code>useReducer</code> state machine, <code>useRef</code>, and performance-safe <code>useCallback</code>.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🌐</div>
+        <h4>Browser APIs</h4>
+        <p>Practical use of <code>getUserMedia</code> (Webcam), <code>speechSynthesis</code> (TTS), <code>localStorage</code> (theme persistence).</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🎨</div>
+        <h4>CSS Architecture</h4>
+        <p>Scalable theming with CSS custom properties, responsive two-column layout, and per-component scoped stylesheets.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🚀</div>
+        <h4>Deployment &amp; CI/CD</h4>
+        <p>End-to-end deployment pipeline using Vercel + GitHub with automatic production deployments on every push.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="icon">🏗️</div>
+        <h4>Software Architecture</h4>
+        <p>Separation of concerns across hooks, utils, and pure components — testable, maintainable code structure.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 11: Summary ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">11</div>
+      <h2>Summary</h2>
+    </div>
+
+    <div class="info-box success">
+      <p>This project was completed end-to-end as part of the post-lunch WFH upskilling task assigned on <strong>6 June 2026</strong> by Vaibhav Joshi Sir. The application was successfully trained, built, and deployed — demonstrating practical integration of machine learning, computer vision, and modern frontend development in a single browser-based application.</p>
+    </div>
+
+    <br/>
+    <table>
+      <thead>
+        <tr><th>Deliverable</th><th>Status</th><th>Link</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Custom ML model training</td>
+          <td style="color:var(--success); font-weight:700;">✅ Completed</td>
+          <td style="font-size:12px"><a href="https://teachablemachine.withgoogle.com/models/JfhfXGxkFl/" target="_blank" style="color:var(--primary)">View Model</a></td>
+        </tr>
+        <tr>
+          <td>React application development</td>
+          <td style="color:var(--success); font-weight:700;">✅ Completed</td>
+          <td style="font-size:12px"><a href="https://github.com/PseudoCoder007/ai-rockPaperScissors-game" target="_blank" style="color:var(--primary)">GitHub Repo</a></td>
+        </tr>
+        <tr>
+          <td>Real-time gesture recognition</td>
+          <td style="color:var(--success); font-weight:700;">✅ Working</td>
+          <td style="font-size:12px">70% confidence threshold</td>
+        </tr>
+        <tr>
+          <td>Scoreboard + streak tracking</td>
+          <td style="color:var(--success); font-weight:700;">✅ Implemented</td>
+          <td style="font-size:12px">Current + best streaks</td>
+        </tr>
+        <tr>
+          <td>Text-to-speech announcements</td>
+          <td style="color:var(--success); font-weight:700;">✅ Implemented</td>
+          <td style="font-size:12px">Web Speech API</td>
+        </tr>
+        <tr>
+          <td>Light/dark theme</td>
+          <td style="color:var(--success); font-weight:700;">✅ Implemented</td>
+          <td style="font-size:12px">CSS custom properties</td>
+        </tr>
+        <tr>
+          <td>Production deployment</td>
+          <td style="color:var(--success); font-weight:700;">✅ Live</td>
+          <td style="font-size:12px"><a href="https://ai-rock-paper-scissors-game-three.vercel.app/" target="_blank" style="color:var(--primary)">Open App</a></td>
+        </tr>
+        <tr>
+          <td>Portfolio listing</td>
+          <td style="color:var(--success); font-weight:700;">✅ Published</td>
+          <td style="font-size:12px"><a href="https://pseudocoder007.github.io/my-portfolio/" target="_blank" style="color:var(--primary)">View Portfolio</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── SIGNATURE ── -->
+  <div class="signature">
+    <div class="sig-avatar">👨‍💻</div>
+    <div class="sig-detail">
+      <h3>Mohd Saif</h3>
+      <p>Post-Lunch WFH Upskilling Task — 6 June 2026</p>
+      <p>Assigned by: <strong>Vaibhav Joshi Sir, Sandeep Sir</strong></p>
+      <p style="margin-top:6px">
+        <a href="mailto:alisaif006123@gmail.com">alisaif006123@gmail.com</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="https://github.com/PseudoCoder007/ai-rockPaperScissors-game" target="_blank">GitHub</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="https://pseudocoder007.github.io/my-portfolio/" target="_blank">Portfolio</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

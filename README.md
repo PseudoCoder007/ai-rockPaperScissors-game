@@ -10,6 +10,18 @@ Built with **React.js + Vite** — no backend required.
 
 ---
 
+## Screenshots
+
+**Game Interface**
+
+![Game Interface](game_screenshot/game%20page.png)
+
+**Footer**
+
+![Footer](game_screenshot/game%20footer.png)
+
+---
+
 ## Features
 
 - **Real-time gesture recognition** via webcam and TensorFlow.js
